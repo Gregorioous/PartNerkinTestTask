@@ -1,18 +1,24 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.serialization)
+    alias(libs.plugins.sqldelight)
+}
+
+sqldelight {
+    databases {
+        create("AppDatabase") {
+            packageName.set("org.nerkin.project.db")
+            schemaOutputDirectory.set(file("src/commonMain/sqldelight/databases"))
+        }
+    }
 }
 
 kotlin {
-    // Убираем compilerOptions из androidTarget
     androidTarget()
 
-    jvmToolchain(11)  // Настраиваем JVM-таргет на 11 здесь
-
+    jvmToolchain(11)
     listOf(
         iosArm64(),
         iosSimulatorArm64()
@@ -24,19 +30,56 @@ kotlin {
     }
 
     sourceSets {
-        androidMain.dependencies {
-            implementation(compose.preview)
-            implementation(libs.androidx.activity.compose)
+        val commonMain by getting {
+            dependencies {
+                //Compose
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material3)
+                implementation(compose.ui)
+                implementation(compose.components.resources)
+                implementation(compose.components.uiToolingPreview)
+
+                //Lifecycle
+                implementation(libs.androidx.lifecycle.viewmodelCompose)
+                implementation(libs.androidx.lifecycle.runtimeCompose)
+
+                //KotlinX
+                implementation(libs.coroutines.core)
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.contentNegotiation)
+                implementation(libs.ktor.serialization.kotlinx.json)
+                implementation(libs.ktor.client.logging)
+
+                //DI
+                implementation(libs.koin.core)
+
+                //Image Loading
+                implementation(libs.coil.compose)
+
+                // SQLDelight
+                implementation(libs.sqldelight.runtime)
+                implementation(libs.sqldelight.coroutines.extensions)
+            }
         }
-        commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodelCompose)
-            implementation(libs.androidx.lifecycle.runtimeCompose)
+
+        val androidMain by getting {
+            dependencies {
+                implementation(libs.androidx.activity.compose)
+                implementation(libs.androidx.appcompat)
+                implementation(libs.androidx.core.ktx)
+
+                implementation(libs.ktor.client.okhttp)
+
+                implementation(libs.coroutines.android)
+
+                implementation(libs.koin.android)
+                implementation(libs.koin.compose)
+
+                implementation(libs.coil.kt.coil.compose)
+
+                implementation(libs.sqldelight.android.driver)
+            }
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -73,8 +116,9 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()  // 1.5.14
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
+
 }
 
 dependencies {

@@ -11,6 +11,8 @@ sqldelight {
         create("AppDatabase") {
             packageName.set("org.nerkin.project.db")
             schemaOutputDirectory.set(file("src/commonMain/sqldelight/databases"))
+            deriveSchemaFromMigrations.set(true)
+            verifyMigrations.set(true)
         }
     }
 }
@@ -55,7 +57,10 @@ kotlin {
                 implementation(libs.koin.core)
 
                 //Image Loading
+                implementation(libs.coil.compose.core)
                 implementation(libs.coil.compose)
+                implementation(libs.coil.mp)
+                implementation(libs.coil.network.ktor)
 
                 // SQLDelight
                 implementation(libs.sqldelight.runtime)
@@ -75,11 +80,19 @@ kotlin {
 
                 implementation(libs.koin.android)
                 implementation(libs.koin.compose)
+                implementation(libs.koin.android)
+                implementation(libs.koin.androidx.compose)
 
-                implementation(libs.coil.kt.coil.compose)
+                implementation(libs.coil.compose.core)
+                implementation(libs.coil.compose)
+                implementation(libs.coil.mp)
+                implementation(libs.coil.network.ktor)
 
                 implementation(libs.sqldelight.android.driver)
             }
+        }
+        iosMain.dependencies {
+            /* implementation(libs.sqldelight.android.driver)*/
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

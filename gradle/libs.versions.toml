@@ -1,6 +1,7 @@
 [versions]
 # Kotlin & Compose
 agp = "8.5.0"
+coil3 = "3.0.0-alpha06"
 coilCompose = "3.0.0-alpha06"
 coilComposeVersion = "2.7.0"
 kotlin = "1.9.24"
@@ -16,7 +17,7 @@ androidx-lifecycle = "2.8.0"
 # Networking, DI, Serialization
 ktor = "2.3.10"
 kotlinx-serialization = "1.6.3"
-koin = "3.5.6"
+koin = "3.6.0-alpha1"
 
 # Coroutines & Flow
 coroutines = "1.8.1"
@@ -36,8 +37,12 @@ sqldelight = "2.0.2"
 
 [libraries]
 # Kotlin & Coroutines
-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
-coil-kt-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilComposeVersion" }
+
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
+coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil3" }
+coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coil3" }
+coil-mp = { module = "io.coil-kt.coil3:coil", version.ref = "coil3" }
+
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -62,6 +67,8 @@ ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "kto
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
+
 
 # Testing
 junit = { module = "junit:junit", version.ref = "junit" }

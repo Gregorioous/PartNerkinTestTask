@@ -54,7 +54,7 @@ data class ConferenceDto(
 
 @Serializable
 data class ListResponse(
-    @SerialName("error") val error: String? = null,
+    @SerialName("error") val error: ApiError? = null,
     @SerialName("data") val data: DataBlock? = null
 )
 
@@ -79,8 +79,14 @@ data class ConferenceWrapper(
 
 @Serializable
 data class ViewResponse(
-    @SerialName("error") val error: String? = null,
+    @SerialName("error") val error: ApiError? = null,
     @SerialName("data") val result: ConferenceDto? = null
+)
+
+@Serializable
+data class ApiError(
+    @SerialName("code") val code: Int,
+    @SerialName("message") val message: String
 )
 
 

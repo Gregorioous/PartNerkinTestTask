@@ -6,16 +6,6 @@ plugins {
     alias(libs.plugins.sqldelight)
 }
 
-sqldelight {
-    databases {
-        create("AppDatabase") {
-            packageName.set("org.nerkin.project.db")
-            schemaOutputDirectory.set(file("src/commonMain/sqldelight/databases"))
-            deriveSchemaFromMigrations.set(true)
-            verifyMigrations.set(true)
-        }
-    }
-}
 
 kotlin {
     androidTarget()
@@ -62,9 +52,6 @@ kotlin {
                 implementation(libs.coil.mp)
                 implementation(libs.coil.network.ktor)
 
-                // SQLDelight
-                implementation(libs.sqldelight.runtime)
-                implementation(libs.sqldelight.coroutines.extensions)
             }
         }
 
@@ -88,7 +75,7 @@ kotlin {
                 implementation(libs.coil.mp)
                 implementation(libs.coil.network.ktor)
 
-                implementation(libs.sqldelight.android.driver)
+                implementation(libs.shimmer)
             }
         }
         iosMain.dependencies {
@@ -135,5 +122,6 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.navigation.compose.jvmstubs)
     debugImplementation(compose.uiTooling)
 }

@@ -8,41 +8,41 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.nerkin.project.domain.interactor.CalendarInteractor
 import org.nerkin.project.domain.model.Conference
+import org.nerkin.project.screen.ui.CalendarUiState
 
-sealed interface UiState {
-    object Loading : UiState
-    data class Success(val items: List<Conference>) : UiState
-    data class Error(val message: String) : UiState
-}
 
 class CalendarViewModel(
     private val interactor: CalendarInteractor
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<List<Conference>>(emptyList())
-    val state: StateFlow<List<Conference>> = _state
+    private val _uiState = MutableStateFlow<CalendarUiState>(CalendarUiState.Loading)
+    val uiState: StateFlow<CalendarUiState> = _uiState
+
+    private val _selectedConference = MutableStateFlow<Conference?>(null)
+    val selectedConference: StateFlow<Conference?> = _selectedConference
 
     fun loadConferences() {
         viewModelScope.launch {
             try {
-                val data = interactor.loadConferences()
-                _state.value = data
-                Log.d("CalendarVM", "Loaded conferences: ${data.size}")
+                val conferences = interactor.loadConferences()
+                _uiState.value = CalendarUiState.Success(conferences)
+                Log.d("CalendarVM", "Loaded conferences: ${conferences.size}")
             } catch (e: Exception) {
+                _uiState.value = CalendarUiState.Error(e.message ?: "Unknown error")
                 Log.e("CalendarVM", "Error loading list", e)
             }
         }
     }
 
-    fun loadDetails() {
+    fun selectConference(conference: Conference) {
+        _selectedConference.value = conference
         viewModelScope.launch {
             try {
-                val conf = interactor.loadConferenceDetails()
-                Log.d("CalendarVM", "Loaded details: ${conf.title}")
+                val details = interactor.loadConferenceDetails()
+                _uiState.value = CalendarUiState.Details(details)
             } catch (e: Exception) {
-                Log.e("CalendarVM", "Error loading details", e)
+                _uiState.value = CalendarUiState.Error(e.message ?: "Error loading details")
             }
         }
     }
 }
-

@@ -6,7 +6,6 @@ import org.nerkin.project.extra.Constants
 
 val ApiKeyPlugin = createClientPlugin("ApiKeyInterceptor") {
     onRequest { request, _ ->
-        val urlBuilder = request.url
-        urlBuilder.parameters.append("api_key", Constants.API_KEY)
+        request.url.parameters.append("api_key", Constants.API_KEY)
     }
 }

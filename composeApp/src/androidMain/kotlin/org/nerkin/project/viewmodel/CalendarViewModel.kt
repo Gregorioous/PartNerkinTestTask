@@ -1,4 +1,4 @@
-package org.nerkin.project
+package org.nerkin.project.viewmodel
 
 
 import android.util.Log

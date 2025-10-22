@@ -23,9 +23,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.nerkin.project.CalendarViewModel
 import org.nerkin.project.domain.model.Conference
 import org.nerkin.project.screen.ui.CalendarUiState
+import org.nerkin.project.viewmodel.CalendarViewModel
 import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)

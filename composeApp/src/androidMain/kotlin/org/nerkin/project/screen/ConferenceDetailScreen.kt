@@ -39,11 +39,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.rememberAsyncImagePainter
 import org.koin.androidx.compose.koinViewModel
-import org.nerkin.project.CalendarViewModel
 import org.nerkin.project.extensions.calculateDuration
 import org.nerkin.project.extensions.parseDate
 import org.nerkin.project.screen.ui.LocationInfo
 import org.nerkin.project.screen.ui.RelatedEvents
+import org.nerkin.project.viewmodel.CalendarViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @RequiresApi(Build.VERSION_CODES.O)

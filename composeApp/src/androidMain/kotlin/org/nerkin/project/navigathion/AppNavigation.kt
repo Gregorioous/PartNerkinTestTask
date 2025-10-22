@@ -8,9 +8,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import org.nerkin.project.CalendarViewModel
 import org.nerkin.project.screen.CalendarScreen
 import org.nerkin.project.screen.ConferenceDetailScreen
+import org.nerkin.project.viewmodel.CalendarViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

@@ -1,27 +1,19 @@
 package org.nerkin.project
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.annotation.RequiresApi
+import org.nerkin.project.screen.MainScreen
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AppRoot()
+            MainScreen()
         }
     }
 }
 
-@Composable
-fun AppRoot() {
-    MaterialTheme {
-        Surface(modifier = Modifier) {
-
-        }
-    }
-}

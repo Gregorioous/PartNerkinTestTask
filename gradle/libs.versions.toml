@@ -7,6 +7,7 @@ coilComposeVersion = "2.7.0"
 kotlin = "1.9.24"
 composeMultiplatform = "1.6.11"
 composeCompiler = "1.5.14"
+composeNavigation = "1.6.11"
 
 # AndroidX
 androidx-activity = "1.8.2"
@@ -33,11 +34,15 @@ android-minSdk = "24"
 android-targetSdk = "34"
 
 # Database
+navigationCompose = "2.7.3"
+shimmer = "0.5.0"
 sqldelight = "2.0.2"
+navigationComposeJvmstubs = "2.9.0-alpha07"
 
 [libraries]
 # Kotlin & Coroutines
 
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
 coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil3" }
 coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coil3" }
@@ -76,6 +81,7 @@ androidx-testExt-junit = { module = "androidx.test.ext:junit", version.ref = "an
 androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-espresso" }
 
 # SQLDelight
+shimmer = { module = "com.facebook.shimmer:shimmer", version.ref = "shimmer" }
 sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight" }
 sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }

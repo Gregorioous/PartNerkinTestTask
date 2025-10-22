@@ -19,6 +19,6 @@ val sharedModule = module {
     single { GetListUseCase(get()) }
     single { GetViewUseCase(get()) }
 
-    // Интерактор — основная точка входа во ViewModel
+    // Интерактор
     single<CalendarInteractor> { CalendarInteractorImpl(get(), get()) }
 }

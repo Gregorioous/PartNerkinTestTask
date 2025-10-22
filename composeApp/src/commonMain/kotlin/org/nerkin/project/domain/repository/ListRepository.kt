@@ -4,5 +4,5 @@ import org.nerkin.project.domain.model.Conference
 
 interface ListRepository {
     suspend fun getList(): List<Conference>
-    suspend fun getView(): Conference
+    suspend fun getView(conferenceId: Int): Conference
 }

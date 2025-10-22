@@ -12,5 +12,6 @@ class CalendarInteractorImpl(
 
     override suspend fun loadConferences(): List<Conference> = getListUseCase()
 
-    override suspend fun loadConferenceDetails(): Conference = getViewUseCase()
+    override suspend fun loadConferenceDetails(conferenceId: Int): Conference =
+        getViewUseCase(conferenceId)
 }

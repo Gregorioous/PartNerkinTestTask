@@ -11,6 +11,11 @@ kotlin {
     androidTarget()
 
     jvmToolchain(11)
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(11))
+        }
+    }
     listOf(
         iosArm64(),
         iosSimulatorArm64()

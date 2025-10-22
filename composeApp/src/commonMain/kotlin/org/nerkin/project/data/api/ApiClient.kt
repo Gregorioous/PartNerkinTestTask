@@ -1,4 +1,4 @@
-package org.nerkin.project.data.remote
+package org.nerkin.project.data.api
 
 
 import io.ktor.client.HttpClient
@@ -17,8 +17,8 @@ class ApiClient(private val client: HttpClient) {
         return response.body()
     }
 
-    suspend fun getView(): ViewResponse {
-        val response = client.get("${Constants.BASE_URL}/view")
+    suspend fun getView(conferenceId: Int): ViewResponse {
+        val response = client.get("${Constants.BASE_URL}/view?id=$conferenceId")
         println("Raw JSON (view): ${response.bodyAsText()}")
         return response.body()
     }

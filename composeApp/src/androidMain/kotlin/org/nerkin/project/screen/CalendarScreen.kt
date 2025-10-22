@@ -1,6 +1,7 @@
 package org.nerkin.project.screen
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -19,14 +20,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
-import org.koin.androidx.compose.koinViewModel
 import org.nerkin.project.CalendarViewModel
-import org.nerkin.project.R
 import org.nerkin.project.domain.model.Conference
 import org.nerkin.project.screen.ui.CalendarUiState
 import java.time.LocalDate
@@ -34,32 +31,30 @@ import java.time.LocalDate
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarScreen(
-    viewModel: CalendarViewModel = koinViewModel(),
+    viewModel: CalendarViewModel,
     onConferenceClick: (Conference) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val navController = rememberNavController()
 
-    LaunchedEffect(Unit) { viewModel.loadConferences() }
+    LaunchedEffect(Unit) {
+        if (uiState is CalendarUiState.Loading) {
+            Log.d("CalendarScreen", "Loading conferences at ${System.currentTimeMillis()}")
+            viewModel.loadConferences()
+        }
+    }
 
     when (uiState) {
-        is CalendarUiState.Loading -> {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
+        is CalendarUiState.Loading -> Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+            Log.d("CalendarScreen", "Showing loading at ${System.currentTimeMillis()}")
         }
-
-        is CalendarUiState.Error -> {
-            val message = (uiState as CalendarUiState.Error).message
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Ошибка: $message")
-            }
-        }
-
         is CalendarUiState.Success -> {
             val conferences = (uiState as CalendarUiState.Success).conferences
-            val groupedByMonth = conferences.groupBy { conference ->
-                val date = conference.startDate?.let { LocalDate.parse(it) } ?: LocalDate.now()
+            val groupedByMonth = conferences.groupBy { conf ->
+                val date = conf.startDate?.let { LocalDate.parse(it) } ?: LocalDate.now()
                 "${date.month.name.lowercase().replaceFirstChar { it.uppercase() }} ${date.year}"
             }.toSortedMap()
 
@@ -69,32 +64,21 @@ fun CalendarScreen(
                     .background(Color(0xFFF5F5F5))
                     .padding(vertical = 12.dp)
             ) {
-                groupedByMonth.forEach { (monthYear, monthConferences) ->
+                groupedByMonth.toList().reversed().toMap()
+                    .forEach { (monthYear, monthConferences) ->
                     item {
                         Text(
                             text = monthYear,
-                            fontFamily = FontFamily(
-                                androidx.compose.ui.text.font.Font(
-                                    R.font.inter_semibold
-                                )
-                            ),
-                            fontWeight = FontWeight.SemiBold,
                             fontSize = 18.sp,
-                            lineHeight = 25.2.sp,
-                            color = Color(0xFF0E1234),
-                            modifier = Modifier
-                                .padding(start = 16.dp, bottom = 8.dp)
-                                .background(Color(0xFF0E1234))
-                                .padding(vertical = 4.dp, horizontal = 8.dp)
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
                         )
                     }
+
                     items(monthConferences) { conf ->
                         ConferenceCard(
                             conference = conf,
-                            onClick = {
-                                viewModel.selectConference(conf);
-                                navController.navigate("detail")
-                            }
+                            onClick = { onConferenceClick(conf) }
                         )
                         Spacer(Modifier.height(12.dp))
                     }
@@ -102,6 +86,7 @@ fun CalendarScreen(
             }
         }
 
-        else -> Unit
+        is CalendarUiState.Error -> Text("Ошибка: ${(uiState as CalendarUiState.Error).message}")
+        is CalendarUiState.Details -> TODO()
     }
 }

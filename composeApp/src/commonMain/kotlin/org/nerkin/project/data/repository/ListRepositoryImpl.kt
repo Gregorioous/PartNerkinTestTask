@@ -1,7 +1,7 @@
 package org.nerkin.project.data.repository
 
+import org.nerkin.project.data.api.ApiClient
 import org.nerkin.project.data.mappers.toDomain
-import org.nerkin.project.data.remote.ApiClient
 import org.nerkin.project.data.remote.Logger
 import org.nerkin.project.domain.model.Conference
 import org.nerkin.project.domain.repository.ListRepository
@@ -28,10 +28,9 @@ class ListRepositoryImpl(
         }
     }
 
-    override suspend fun getView(): Conference {
-        val resp = api.getView()
+    override suspend fun getView(conferenceId: Int): Conference {
+        val resp = api.getView(conferenceId)
         return resp.result?.toDomain() ?: throw IllegalStateException("Empty response")
-
     }
 
 

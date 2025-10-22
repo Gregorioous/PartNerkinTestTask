@@ -6,14 +6,14 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,6 +24,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -32,7 +35,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.nerkin.project.screen.CalendarScreen
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import org.koin.androidx.compose.koinViewModel
+import org.nerkin.project.navigathion.AppNavigation
+import org.nerkin.project.screen.ui.CalendarUiState
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -48,6 +55,14 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyApp() {
+    val viewModel: CalendarViewModel = koinViewModel() // Один экземпляр
+    val navController = rememberNavController() as NavHostController
+    val uiState = viewModel.uiState.collectAsState().value
+
+    LaunchedEffect(Unit) {
+        Log.d("MyApp", "Composed at ${System.currentTimeMillis()}")
+    }
+
     MaterialTheme {
         Scaffold(
             topBar = {
@@ -64,22 +79,28 @@ fun MyApp() {
                         )
                     },
                     navigationIcon = {
-                        IconButton(onClick = { }) {
+                        IconButton(
+                            onClick = {
+                                if (navController.currentBackStackEntry?.destination?.route != "calendar") {
+                                    navController.popBackStack()
+                                }
+                            },
+                            enabled = navController.currentBackStackEntry?.destination?.route != "calendar"
+                        ) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
                                 contentDescription = "Back",
-                                tint = Color.Black
+                                tint = if (navController.currentBackStackEntry?.destination?.route != "calendar") Color.Black else Color.Gray
                             )
                         }
                     },
                     actions = {
-                        IconButton(onClick = { }) {
+                        IconButton(onClick = { /* Обработка поддержки */ }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_headset),
                                 contentDescription = "Support",
                                 modifier = Modifier
                                     .size(24.dp)
-                                    .border(2.dp, Color(0xFF0E1234), CircleShape)
                             )
                         }
                     },
@@ -95,11 +116,13 @@ fun MyApp() {
                     .padding(paddingValues),
                 color = MaterialTheme.colorScheme.background
             ) {
-                CalendarScreen(
-                    onConferenceClick = { conference ->
-                        Log.d("MainActivity", "Clicked on: ${conference.title}")
+                if (uiState is CalendarUiState.Loading) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
                     }
-                )
+                } else {
+                    AppNavigation(viewModel = viewModel, navController = navController)
+                }
             }
         }
     }

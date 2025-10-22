@@ -1,4 +1,4 @@
-package org.nerkin.project.data.remote
+package org.nerkin.project.data.api
 
 import io.ktor.client.plugins.api.createClientPlugin
 import org.nerkin.project.extra.Constants

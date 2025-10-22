@@ -2,7 +2,6 @@ package org.nerkin.project.screen
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -35,7 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.rememberAsyncImagePainter
+import coil3.compose.AsyncImage
 import org.nerkin.project.domain.model.Conference
 import org.nerkin.project.extensions.parseDayMonth
 import org.nerkin.project.screen.ui.ConferenceTags
@@ -111,19 +110,22 @@ fun ConferenceCard(conference: Conference, onClick: () -> Unit) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-
                     .background(Color.Black.copy(alpha = 0.04f), RoundedCornerShape(12.dp))
             ) {
-                Image(
-                    painter = rememberAsyncImagePainter(conference.imageUrl),
-                    contentDescription = null,
+                Box(
                     modifier = Modifier
                         .width(156.dp)
                         .height(104.dp)
-                        .clip(RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp)),
-                    contentScale = ContentScale.Crop
-                )
-
+                        .clip(RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp))
+                ) {
+                    AsyncImage(
+                        model = conference.imageUrl,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentScale = ContentScale.Crop,
+                    )
+                }
 
                 Spacer(modifier = Modifier.width(36.dp))
 
@@ -136,7 +138,8 @@ fun ConferenceCard(conference: Conference, onClick: () -> Unit) {
                 ) {
                     Row(verticalAlignment = Alignment.Bottom) {
                         Text(
-                            text = startDay,
+                            text = startDay.toIntOrNull()
+                                ?.let { if (it < 10) "0$it" else it.toString() } ?: startDay,
                             color = Color(0xFF0E1234),
                             fontSize = 40.sp,
                             fontWeight = FontWeight.Light,
@@ -150,7 +153,8 @@ fun ConferenceCard(conference: Conference, onClick: () -> Unit) {
                             modifier = Modifier.padding(horizontal = 4.dp)
                         )
                         Text(
-                            text = endDay,
+                            text = endDay.toIntOrNull()
+                                ?.let { if (it < 10) "0$it" else it.toString() } ?: endDay,
                             color = Color(0xFF0E1234),
                             fontSize = 40.sp,
                             fontWeight = FontWeight.Light,

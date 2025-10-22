@@ -76,6 +76,9 @@ kotlin {
                 implementation(libs.coil.network.ktor)
 
                 implementation(libs.shimmer)
+
+                implementation(libs.androidx.navigation.compose)
+
             }
         }
         iosMain.dependencies {
@@ -122,6 +125,5 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.navigation.compose.jvmstubs)
     debugImplementation(compose.uiTooling)
 }

@@ -5,5 +5,5 @@ import org.nerkin.project.domain.repository.ListRepository
 
 
 class GetViewUseCase(private val repo: ListRepository) {
-    suspend operator fun invoke(): Conference = repo.getView()
+    suspend operator fun invoke(conferenceId: Int): Conference = repo.getView(conferenceId)
 }

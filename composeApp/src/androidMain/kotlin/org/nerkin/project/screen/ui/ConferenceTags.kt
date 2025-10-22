@@ -21,7 +21,9 @@ fun ConferenceTags(tags: List<String>) {
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.padding(top = 16.dp)
+        modifier = Modifier
+            .padding(top = 16.dp)
+
     ) {
         tags.forEach { tag ->
             Box(

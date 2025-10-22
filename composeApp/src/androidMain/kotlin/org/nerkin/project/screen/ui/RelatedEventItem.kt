@@ -49,7 +49,7 @@ fun RelatedEventItem(isNew: Boolean, title: String, rating: Double?, onClick: ()
                         ),
                         fontWeight = FontWeight.Medium,
                         fontSize = 11.sp,
-                        lineHeight = 15.4.sp, // 140% от 11sp
+                        lineHeight = 15.4.sp,
                         color = Color.White
                     )
                 }
